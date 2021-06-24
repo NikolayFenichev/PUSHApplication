@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,12 +34,17 @@ namespace Statistic.Web
         {
             services.AddScoped<IStatisticService, StatisticService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddDbContext<PUSHApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection")));
+
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration.GetConnectionString("RedisConnectionString");
             });
+
+            services.Configure<KestrelServerOptions>(
+            Configuration.GetSection("Kestrel"));
 
             services.AddControllers();
 

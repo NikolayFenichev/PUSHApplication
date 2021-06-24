@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,6 +36,9 @@ namespace MessageReciever.Web
                 var routingKeys = Configuration["RoutingKeys:MessageQueue"];
                 return new RabbitProducerConfiguration(host, routingKeys);
             });
+
+            services.Configure<KestrelServerOptions>(
+            Configuration.GetSection("Kestrel"));
 
             services.AddControllers();
 

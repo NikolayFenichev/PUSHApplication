@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PUSHApplication.DAL.Repositories.Interfaces;
 using PUSHApplication.DAL.Repositories;
 using PUSHApplication.DAL;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace RegistrationService
 {
@@ -25,12 +26,17 @@ namespace RegistrationService
         {
             services.AddScoped<IRegistrationService, Registration.BLL.Services.RegistrationService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddDbContext<PUSHApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection")));
+
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration.GetConnectionString("RedisConnectionString");
             });
+
+            services.Configure<KestrelServerOptions>(
+            Configuration.GetSection("Kestrel"));
 
             services.AddControllers();
 

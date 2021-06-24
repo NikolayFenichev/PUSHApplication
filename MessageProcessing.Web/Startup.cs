@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,7 @@ namespace MessageProcessing.Web
         {
             services.AddSingleton<IMessageProcessingService, MessageProcessingService>();
             services.AddSingleton<IUnitOfWork, UnitOfWork>();
+
             services.AddSingleton<IConsumerConfiguration, RabbitConsumerConfiguration>(serviceProvider =>
             {
                 var host = Configuration["HostName:HostNameConsume"];
@@ -46,12 +48,17 @@ namespace MessageProcessing.Web
                 var routingKeys = Configuration["RoutingKeys:FirebaseMessageQueue"];
                 return new RabbitProducerConfiguration(host, routingKeys);
             });
+
             services.AddDbContext<PUSHApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection")), ServiceLifetime.Singleton);
+
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration.GetConnectionString("RedisConnectionString");
             });
+
+            services.Configure<KestrelServerOptions>(
+            Configuration.GetSection("Kestrel"));
 
             services.AddControllers();
         }
