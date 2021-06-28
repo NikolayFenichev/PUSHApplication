@@ -47,6 +47,8 @@ namespace MessageProcessing.BLL.Services
                 await AddMessageAsync(message, messageDto.PhoneNumbers);
                 await SendMessage(messageDto);
 
+                _logger.LogError($"{nameof(MessageProcessingAsync)}: Сообщение обработано и отправлено в сервис отправки сообщения в FCM");
+
                 return true;
             }
             catch (Exception ex)

@@ -85,6 +85,8 @@ namespace Firebase.BLL.Services
                     }
                 }
 
+                _logger.LogError($"{nameof(MessagePush)}: PUSH уведомление отправлено в FCM");
+
                 return true;
             }
             catch (Exception ex)

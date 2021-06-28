@@ -50,6 +50,8 @@ namespace RegistrationService.Controllers
                     mobileAppDto.AppVersion
                 };
 
+                _logger.LogError($"{nameof(UnRegistration)}: Пользователь зарегистрирован");
+
                 return CreatedAtRoute(routeValue, mobileAppDto);
             }
             catch (Exception ex)
@@ -71,6 +73,8 @@ namespace RegistrationService.Controllers
                 {
                     return NotFound();
                 }
+
+                _logger.LogError($"{nameof(UnRegistration)}: Пользователь удалён");
 
                 return NoContent();
             }
