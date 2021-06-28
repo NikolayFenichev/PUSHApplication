@@ -21,7 +21,6 @@ namespace Firebase.BLL.Services
 
         private IConsumerConfiguration _rabbitConsumerConfiguration;
         private ILogger<FirebaseService> _logger;
-        private HttpRequestMessage _httpRequest;
         private HttpClient _httpClient;
         private string _serverKey;
         private string _senderId;
@@ -33,7 +32,6 @@ namespace Firebase.BLL.Services
             _senderId = firebaseKey.SenderId;
             _logger = logger;
 
-            _httpRequest = new HttpRequestMessage(HttpMethod.Post, "https://fcm.googleapis.com/fcm/send");
             _httpClient = new HttpClient();
 
             _rabbitConsumerConfiguration = consumerConfiguration;
@@ -73,11 +71,14 @@ namespace Firebase.BLL.Services
 
                     var jsonBody = JsonSerializer.Serialize(data);
 
-                    _httpRequest.Headers.TryAddWithoutValidation("Authorization", _serverKey);
-                    _httpRequest.Headers.TryAddWithoutValidation("Sender", _senderId);
-                    _httpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-                    var result = await _httpClient.SendAsync(_httpRequest);
+                    var httpRequest = new HttpRequestMessage(HttpMethod.Post, "https://fcm.googleapis.com/fcm/send");
+
+                    httpRequest.Headers.TryAddWithoutValidation("Authorization", $"key={_serverKey}");
+                    httpRequest.Headers.TryAddWithoutValidation("Sender", $"id={_senderId}");
+                    httpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                    var result = await _httpClient.SendAsync(httpRequest);
 
                     if (!result.IsSuccessStatusCode)
                     {
@@ -99,7 +100,6 @@ namespace Firebase.BLL.Services
 
         public void Dispose()
         {
-            _httpRequest.Dispose();
             _httpClient.Dispose();
         }
     }
