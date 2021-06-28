@@ -36,6 +36,8 @@ namespace MessageProcessing.BLL.Services
 
         public async Task<bool> MessageProcessingAsync(string messageJson)
         {
+            _logger.LogInformation($"{nameof(MessageProcessingAsync)}: Принято новое сообщение");
+
             var messageDto = JsonSerializer.Deserialize<MessageDto>(messageJson);
 
             var mapper = new Mapper(new MapperConfiguration(cfg =>
@@ -47,7 +49,7 @@ namespace MessageProcessing.BLL.Services
                 await AddMessageAsync(message, messageDto.PhoneNumbers);
                 await SendMessage(messageDto);
 
-                _logger.LogError($"{nameof(MessageProcessingAsync)}: Сообщение обработано и отправлено в сервис отправки сообщения в FCM");
+                _logger.LogInformation($"{nameof(MessageProcessingAsync)}: Сообщение обработано и отправлено в сервис отправки сообщения в FCM");
 
                 return true;
             }

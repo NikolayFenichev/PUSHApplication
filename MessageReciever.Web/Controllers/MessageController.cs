@@ -41,7 +41,7 @@ namespace MessageReciever.Web.Controllers
 
                     _sendMessageService.Send(message);
 
-                    _logger.LogError($"{nameof(Send)}: Сообщение отправлено в сервис обработки");
+                    _logger.LogInformation($"{nameof(Send)}: Сообщение отправлено в сервис обработки");
 
                     return Ok();
                 }

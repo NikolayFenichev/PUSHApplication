@@ -46,6 +46,7 @@ namespace Firebase.BLL.Services
 
         public async Task<bool> MessagePush(string firebaseMessageDtoJson)
         {
+            _logger.LogInformation($"{nameof(MessagePush)}: Принято новое сообщение");
             try
             {
                 var firebaseMessageDto = JsonSerializer.Deserialize<FirebaseMessageDto>(firebaseMessageDtoJson);
@@ -85,7 +86,7 @@ namespace Firebase.BLL.Services
                     }
                 }
 
-                _logger.LogError($"{nameof(MessagePush)}: PUSH уведомление отправлено в FCM");
+                _logger.LogInformation($"{nameof(MessagePush)}: PUSH уведомление отправлено в FCM");
 
                 return true;
             }
