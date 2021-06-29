@@ -65,9 +65,13 @@ namespace Statistic.Web.Controllers
         {
             try
             {
-                var messages = await _statisticService.GetMessagesByPhoneNumberAsync(pageParameters, phoneNumber);
+                var messagesDto = await _statisticService.GetMessagesByPhoneNumberAsync(pageParameters, phoneNumber);
 
-                if (!messages.Any())
+                var messagesViewModels = new PagedList<MessageViewModel>(messagesDto.Select(m =>
+                new MessageViewModel { Header = m.Header, MessageSendTime = m.MessageSendTime, Text = m.Text }).ToList(),
+                messagesDto.TotalCount, messagesDto.CurrentPage, messagesDto.PageSize);
+
+                if (!messagesViewModels.Any())
                 {
                     var message = "Сообщения не найдены";
                     _logger.LogError($"{nameof(GetMessagesByPhoneNumber)}: {message}");
@@ -77,17 +81,17 @@ namespace Statistic.Web.Controllers
 
                 var messagesPageInfo = new
                 {
-                    messages.TotalCount,
-                    messages.PageSize,
-                    messages.CurrentPage,
-                    messages.TotalPages,
-                    messages.HasNext,
-                    messages.HasPrevious
+                    messagesViewModels.TotalCount,
+                    messagesViewModels.PageSize,
+                    messagesViewModels.CurrentPage,
+                    messagesViewModels.TotalPages,
+                    messagesViewModels.HasNext,
+                    messagesViewModels.HasPrevious
                 };
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(messagesPageInfo));
 
-                return Ok(messages);
+                return Ok(messagesViewModels);
             }
             catch (Exception ex)
             {
