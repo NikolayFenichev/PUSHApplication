@@ -19,3 +19,18 @@ PUSHApplication
 Перед первым запуском приложения необходимо применить миграции, для этого нужно построить решение, 
 затем выполнить миграции, выбрав стартовое приложение RegistrationService.Web, и Default project: PUSHApplication.DAL в Package Manager Console.
 Далее в Package Manager Console необходимо выполнить команду Update-Database.
+
+Описание API
+-----------------------------------
+1. RegistrationService.Web
+   * RegistrationController.Registration([FromBody] MobileAppViewModel mobileAppViewModel) Регистрирует мобильное приложение. MobileAppViewModel mobileAppViewModel - Модель представления мобильного приложения
+   * RegistrationController.UnRegistration(string token) Разрегистрация мобильного приложения по его токену. string token - Токен приложения
+2. MessageReciever.Web
+   * MessageController.Send([FromBody] MessageViewModel messageVm) Отправка сообщения в сервис обработки сообщений. MessageViewModel messageVm - Модель представления сообщения
+3. MessageProcessing.Web
+   * MessageProcessingController.Start() Запуск работы сервиса
+4. FirabaseService.Web
+   * FirebaseController.Start() Запуск работы сервиса
+5. Statistic.Web
+   * FirebaseController.GetRegisteredVersions() Возвращает список зарегестрированных версий приложений
+   * FirebaseController.GetMessagesByPhoneNumber([FromQuery] PageParameters pageParameters, string phoneNumber) Получить список сообщений отправленных на указанный номер телефона. Поддержка пэйджинга. PageParameters pageParameters - параметры пэйджинга. string phoneNumber - номер телефона
