@@ -34,3 +34,7 @@ PUSHApplication
 5. Statistic.Web
    * FirebaseController.GetRegisteredVersions() Возвращает список зарегестрированных версий приложений
    * FirebaseController.GetMessagesByPhoneNumber([FromQuery] PageParameters pageParameters, string phoneNumber) Получить список сообщений отправленных на указанный номер телефона. Поддержка пэйджинга. PageParameters pageParameters - параметры пэйджинга. string phoneNumber - номер телефона
+
+Описание архитектуры
+-----------------------------------
+![Image alt](https://github.com/NikolayFenichev/PUSHApplication/raw/master/PUSHApplicationArhitecture.png)
