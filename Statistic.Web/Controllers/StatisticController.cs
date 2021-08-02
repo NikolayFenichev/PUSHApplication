@@ -40,7 +40,7 @@ namespace Statistic.Web.Controllers
                 if (!versionInfoDto.Any())
                 {
                     var message = "Версии не найдены";
-                    _logger.LogError($"{nameof(GetRegisteredVersions)}: {message}");
+                    _logger.LogError($"{nameof(GetRegisteredVersions)}: {message}"); ;
 
                     return NotFound(message);
                 }
